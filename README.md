@@ -9,6 +9,9 @@
 [interceptors](https://github.com/arslanovdi/gRPC_examples/tree/master/interceptors)
 Пример перехватчиков методов (interceptor, middleware)
 
+[authentication](https://github.com/arslanovdi/gRPC_examples/tree/master/authentication)
+Безопасность в gRPC
+
 [multiplexing](https://github.com/arslanovdi/gRPC_examples/tree/master/multiplexing)
 Запуск нескольких gRPC-сервисов на одном сервере (порту).
 
