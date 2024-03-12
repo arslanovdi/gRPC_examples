@@ -1,6 +1,8 @@
 <dl>
 <dt>Install</dt>
-<dd>`go get -u google.golang.org/grpc`</dd>
+<dd>
+go get -u google.golang.org/grpc
+</dd>
 </dl>
 
 [communication_patterns](https://github.com/arslanovdi/gRPC_examples/tree/master/communication_patterns)
