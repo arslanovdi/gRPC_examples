@@ -20,6 +20,10 @@ go get -u google.golang.org/grpc
 [metadata](https://github.com/arslanovdi/gRPC_examples/tree/master/metadata)
 Пример приема/передачи метаданных.
 
+[grpc-gateway](https://github.com/arslanovdi/gRPC_examples/tree/master/grpc-gateway)
+Пример обработки grpc сервером HTTP запросов. Может быть полезно если у grpc сервера есть grpc и HTTP клиенты, или при переходе.
+Для генерации используется Buf. Генерируется OpenAPI спецификация, gRPC, HTTP код.
+
 [errors](https://github.com/arslanovdi/gRPC_examples/tree/master/errors)
 список ошибок
 

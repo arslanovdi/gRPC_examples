@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+import "google/api/annotations.proto";
+
+package ecommerce;
+
+option go_package = "ecommerce.v1";
+
+service OrderManagement {
+  // addOrder создает новый заказ.
+  rpc addOrder(Order) returns (google.protobuf.StringValue){// одиночные (унарные) вызовы
+    option (google.api.http) = { // добавляем аннотацию HTTP
+      post: "/v1/order" // POST запрос на путь /v1/order
+      body: "*" // любое поле, не соответствующее шаблону пути, будет передано в тело запроса
+    };
+  }
+
+  // getOrder возвращает информацию о заказе.
+  rpc getOrder(google.protobuf.StringValue) returns (Order){// одиночные (унарные) вызовы
+    option (google.api.http) = {
+      get:"/v1/order/{value}" // GET запрос на путь /v1/order/{value}
+    };
+  }
+}
+
+message Order {
+  string id = 1;
+  repeated string items = 2;  // массив / список
+  string description = 3;
+  float price = 4;
+  string destination = 5;
+}
+
+message CombinedShipment {
+  string id = 1;
+  string status = 2;
+  repeated Order ordersList = 3;  // массив / список
+}

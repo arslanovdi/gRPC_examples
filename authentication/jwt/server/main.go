@@ -124,10 +124,6 @@ func ensureValidJWTCredentials(ctx context.Context, req interface{}, info *grpc.
 		return nil, ErrInvalidToken
 	}
 
-	//myJWT.VerifyToken(md.Get())
-	/*if !valid(md["authorization"]) { // вызываем проверку логина/пароля
-		return nil, ErrInvalidToken
-	}*/
 	// вызываем обработчик входящего запроса
 	return handler(ctx, req)
 }

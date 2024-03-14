@@ -1,0 +1,25 @@
+version: v1
+plugins:
+  # генерация пакета go кода
+  - plugin: go
+    out: pkg/gen/go
+    opt:
+      - paths=source_relative
+
+  # генерация gRPC кода
+  - plugin: go-grpc
+    out: pkg/gen/go
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
+
+  # генерация HTTP кода для доступа к ручкам
+  - plugin: grpc-gateway
+    out: pkg/gen/go
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+
+  # генерация OpenAPI кода (сваггеровской спецификации ручек)
+  - plugin: openapiv2
+    out: pkg/gen/openapi

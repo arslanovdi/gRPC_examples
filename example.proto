@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
 
 package ecommerce;
 
@@ -15,10 +16,10 @@ service OrderManagement {
 }
 
 message Order {
-  string id = 1;
+  optional string id = 1; // необязательное поле
   repeated string items = 2;  // массив / список
   string description = 3;
-  float price = 4;
+  float price = 4  [deprecated = true]; // Обявление поля устаревшим, чтобы в IDE у всех пользователей grpc показывало предупреждение. В будущем поле будет удалено
   string destination = 5;
 }
 
@@ -35,13 +36,27 @@ enum Status {
   DELIVERED = 2;
 }
 
+message TimeMessage {
+  google.protobuf.Timestamp created_at = 1;
+}
+
 message Shipment {
   map<string, string> orders= 1;
 }
 
 message Command {
   oneof command_type{
-    string text = 1;
-    int32 number = 2;
+    string text = 2;
+    int32 number = 3;
   }
+}
+
+message SellerParams{
+  message Item{
+    google.protobuf.Int64Value id = 1;
+    reserved 3; // заглушка для обратной совместимости, если это поле когда-то использовалось (и есть еще живые клиенты) но оно было удалено
+    google.protobuf.DoubleValue rating = 4;
+    map<string, string> params = 5;
+  }
+  repeated Item items = 1;
 }
