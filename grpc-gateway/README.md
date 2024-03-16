@@ -5,6 +5,7 @@
 
 ## документация gRPC-gateway
 https://grpc-ecosystem.github.io/grpc-gateway/
+
 https://github.com/grpc-ecosystem/grpc-gateway
 
 ## install
@@ -18,9 +19,12 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 ```go get golang.org/x/sync```    // для использования errgroup
 
 Googleapis(https://github.com/googleapis/googleapis). Эти файлу необходимы для grpc-gateway.
+
 Пока не нашел решения лучше, чем просто скопировать файлы в папку проекта, создал отдельную папку для proto файлов. 
+```
 google/api/annotations.proto
 google/api/http.proto
+```
 Для того чтобы IDE знала где искать эти proto файлы может понадобиться прописать путь к папке c проектом в настройках Protocol Buffers - Import Paths вашей IDE, в моем случае Goland.
 
 ## документация buf
@@ -30,7 +34,9 @@ buf install in windows
 ```scoop install buf```
 
 В этом примере файлы генерирую при помощи buf. Также можно сгенерить при помощи protoc, в makefile лежит команда.
+
 Сайт buf.build заблокирован из РФ и РБ. В связи с этим удаленные плагины не работают, их необходимо загружать и запускать локально. https://buf.build/docs/generate/tutorial
+
 Есть смысл задуматься в использовании buf, плохой фактор когда в любой момент могут заблокировать ту или иную локацию.
 
 Загрузка зависимостей deps из Buf Schema Registry(BSR) также не работает, поэтому необходимые proto файлы положил локально в папку proto.
@@ -39,3 +45,7 @@ buf install in windows
 Реализована генерация сваггер доки в buf.
 Сваггер поднят на том же порту что и http ручки.
 Для работы сваггера в проект нужно положить папку: https://github.com/swagger-api/swagger-ui/tree/master/dist , у меня она в swagger-ui.
+В файле swagger-initializer.js заменить 
+```url: "https://petstore.swagger.io/v2/swagger.json",```
+на
+```url: "swagger.json",```
