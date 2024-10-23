@@ -16,15 +16,14 @@ import (
 )
 
 const (
-	httpServerEndpoint = "localhost:8081"
 	gRPCServerEndpoint = "localhost:50051"
 )
 
 func main() {
 
 	// подключение к grpc серверу без TLS
-	conn, err := grpc.Dial(gRPCServerEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
+	conn, err := grpc.NewClient(gRPCServerEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil || conn == nil {
 		slog.Warn("did not connect", slog.Any("error", err)) // В моем случае ошибки не возникает даже при отключенном сервере, просто висит ConnectionState: Connecting
 		os.Exit(1)
 	} // Пока не понятно как диагностировать что сервер не поднят, пробный запрос развечто делать типа HealthCheck
@@ -74,7 +73,9 @@ func main() {
 			Timeout: 5 * time.Second,
 		}
 		resp, err := client.Do(request)
-		defer resp.Body.Close()
+		if resp != nil {
+			defer resp.Body.Close()
+		}
 		if err != nil {
 			slog.Error("AddOrder() failed:", slog.Any("error", err))
 		}
@@ -91,7 +92,12 @@ func main() {
 			Timeout: 5 * time.Second,
 		}
 		resp, err := client.Do(request)
-		defer resp.Body.Close()
+		if resp != nil {
+			defer resp.Body.Close()
+		} else {
+			slog.Info("GetOrder() failed:", slog.String("response", "nil"))
+			os.Exit(1)
+		}
 		if err != nil {
 			slog.Error("GetOrder() failed:", slog.Any("error", err))
 		}

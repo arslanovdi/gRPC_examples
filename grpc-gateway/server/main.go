@@ -28,7 +28,7 @@ const (
 // ecommerceServer структура имплементирует интерфейс
 // OrderManagementServer, который содержит методы описанные в ecommerce.proto
 type ecommerceServer struct {
-	orderMap                              map[string]pb.Order // сохранять в мапу обьект сообщения плохая идея, тут это для примера
+	orderMap                              map[string]pb.Order // TODO сохранять в мапу обьект сообщения плохая идея, тут это для примера
 	mu                                    sync.Mutex
 	pb.UnimplementedOrderManagementServer // обязательно встраивать структуру
 }
@@ -57,7 +57,7 @@ func (s *ecommerceServer) initSampleData() {
 
 // AddOrder Simple RPC
 // одиночные (унарные) вызовы
-func (s *ecommerceServer) AddOrder(ctx context.Context, orderReq *pb.Order) (*wrappers.StringValue, error) {
+func (s *ecommerceServer) AddOrder(_ context.Context, orderReq *pb.Order) (*wrappers.StringValue, error) {
 	slog.Info("AddOrder() order added", "ID", orderReq.Id)
 
 	s.mu.Lock()
@@ -69,7 +69,7 @@ func (s *ecommerceServer) AddOrder(ctx context.Context, orderReq *pb.Order) (*wr
 
 // GetOrder Simple RPC
 // одиночные (унарные) вызовы
-func (s *ecommerceServer) GetOrder(ctx context.Context, orderId *wrappers.StringValue) (*pb.Order, error) {
+func (s *ecommerceServer) GetOrder(_ context.Context, orderId *wrappers.StringValue) (*pb.Order, error) {
 	s.mu.Lock()
 	ord, exists := s.orderMap[orderId.Value]
 	s.mu.Unlock()
@@ -95,7 +95,7 @@ func main() {
 	// htpp сервер
 
 	// dial the gRPC server above to make a client connection
-	conn, err := grpc.Dial(gRPCServerEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(gRPCServerEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("fail to dial: %v", err)
 	}

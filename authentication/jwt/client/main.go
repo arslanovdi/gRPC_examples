@@ -44,7 +44,7 @@ func main() {
 		grpc.WithTransportCredentials(creds)} // задаем параметры подключения к серверу, с TLS
 
 	// подключение к grpc серверу с TLS и oauth
-	conn, err := grpc.Dial(address, opts...)
+	conn, err := grpc.NewClient(address, opts...)
 	if err != nil {
 		slog.Warn("did not connect", slog.Any("error", err)) // В моем случае ошибки не возникает даже при отключенном сервере, просто висит ConnectionState: Connecting
 		os.Exit(1)
@@ -84,7 +84,7 @@ func (c jwtCredentials) RequireTransportSecurity() bool {
 	return true
 }
 
-func (c jwtCredentials) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
+func (c jwtCredentials) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
 	return map[string]string{
 		"authorization": c.Token,
 	}, nil

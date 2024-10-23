@@ -82,7 +82,7 @@ func newWrappedStream(s grpc.ClientStream) grpc.ClientStream {
 
 func main() {
 	// подключение к grpc серверу без TLS
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()),
+	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithUnaryInterceptor(orderUnaryClientInterceptor), // регистрация перехватчика осуществляется внутри grpc.Dial
 		grpc.WithStreamInterceptor(clientStreamInterceptor))
 	if err != nil {
@@ -237,6 +237,10 @@ func readingProcessOrders(streamProcOrder pb.OrderManagement_ProcessOrdersClient
 	for {
 		combinedShipment, errProcOrder := streamProcOrder.Recv()
 		if errProcOrder == io.EOF {
+			break
+		}
+		if combinedShipment == nil {
+			slog.Warn("Combined shipment", slog.String("is nil", "true"))
 			break
 		}
 		slog.Info("Combined shipment", slog.Any("order list", combinedShipment.OrdersList))

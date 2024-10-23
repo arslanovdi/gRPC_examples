@@ -19,14 +19,13 @@ import (
 )
 
 const (
-	port           = ":50051"
-	orderBatchSize = 5
+	port = ":50051"
 )
 
 // ecommerceServer структура имплементирует интерфейс
 // OrderManagementServer, который содержит методы описанные в ecommerce.proto
 type ecommerceServer struct {
-	orderMap                              map[string]pb.Order // сохранять в мапу обьект сообщения плохая идея, тут это для примера
+	orderMap                              map[string]pb.Order // TODO сохранять в мапу обьект сообщения плохая идея, тут это для примера
 	mu                                    sync.Mutex
 	pb.UnimplementedOrderManagementServer // обязательно встраивать структуру
 }

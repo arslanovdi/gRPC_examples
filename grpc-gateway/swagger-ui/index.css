@@ -1,6 +1,6 @@
 html {
     box-sizing: border-box;
-    overflow: -moz-scrollbars-vertical;
+    overflow: auto;
     overflow-y: scroll;
 }
 

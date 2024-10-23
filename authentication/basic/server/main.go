@@ -34,7 +34,7 @@ var (
 // ecommerceServer структура имплементирует интерфейс
 // OrderManagementServer, который содержит методы описанные в ecommerce.proto
 type ecommerceServer struct {
-	orderMap                                        map[string]ecommerce_v1.Order // сохранять в мапу обьект сообщения плохая идея, тут это для примера
+	orderMap                                        map[string]ecommerce_v1.Order // TODO сохранять в мапу обьект сообщения плохая идея, тут это для примера
 	mu                                              sync.Mutex
 	ecommerce_v1.UnimplementedOrderManagementServer // обязательно встраивать структуру
 }
@@ -63,7 +63,7 @@ func (s *ecommerceServer) initSampleData() {
 
 // AddOrder Simple RPC
 // одиночные (унарные) вызовы
-func (s *ecommerceServer) AddOrder(ctx context.Context, orderReq *ecommerce_v1.Order) (*wrappers.StringValue, error) {
+func (s *ecommerceServer) AddOrder(_ context.Context, orderReq *ecommerce_v1.Order) (*wrappers.StringValue, error) {
 	slog.Info("AddOrder() order added", "ID", orderReq.Id)
 
 	s.mu.Lock()
@@ -107,7 +107,7 @@ func valid(authorization []string) bool {
 
 // ensureValidBasicCredentials перехватчик унарных вызовов
 // выполняем проверку аутентификации
-func ensureValidBasicCredentials(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo,
+func ensureValidBasicCredentials(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler) (interface{}, error) {
 	md, ok := metadata.FromIncomingContext(ctx) // All keys in the returned MD are lowercase.
 	if !ok {

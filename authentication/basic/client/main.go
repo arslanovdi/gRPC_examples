@@ -37,7 +37,7 @@ func main() {
 		grpc.WithTransportCredentials(creds)} // задаем параметры подключения к серверу, с TLS
 
 	// подключение к grpc серверу с TLS и базовой аутентификацией
-	conn, err := grpc.Dial(address, opts...)
+	conn, err := grpc.NewClient(address, opts...)
 	if err != nil {
 		slog.Warn("did not connect", slog.Any("error", err)) // В моем случае ошибки не возникает даже при отключенном сервере, просто висит ConnectionState: Connecting
 		os.Exit(1)
@@ -70,7 +70,7 @@ type basicAuth struct {
 }
 
 // GetRequestMetadata преобразует пару логин/пароль в метаданные запроса (мапу)
-func (b basicAuth) GetRequestMetadata(ctx context.Context, in ...string) (map[string]string, error) {
+func (b basicAuth) GetRequestMetadata(_ context.Context, _ ...string) (map[string]string, error) {
 	auth := b.username + ":" + b.password
 	enc := base64.StdEncoding.EncodeToString([]byte(auth))
 	return map[string]string{

@@ -19,7 +19,7 @@ const (
 
 func main() {
 	// подключение к grpc серверу без TLS
-	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		slog.Warn("did not connect", slog.Any("error", err)) // В моем случае ошибки не возникает даже при отключенном сервере, просто висит ConnectionState: Connecting
 		os.Exit(1)
@@ -172,6 +172,10 @@ func readingProcessOrders(streamProcOrder pb.OrderManagement_ProcessOrdersClient
 	for {
 		combinedShipment, errProcOrder := streamProcOrder.Recv()
 		if errProcOrder == io.EOF {
+			break
+		}
+		if combinedShipment == nil {
+			slog.Warn("Combined shipment", slog.String("is nil", "true"))
 			break
 		}
 		slog.Info("Combined shipment", slog.Any("order list", combinedShipment.OrdersList))
